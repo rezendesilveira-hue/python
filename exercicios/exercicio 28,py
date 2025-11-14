@@ -1,0 +1,79 @@
+#feito via gemini
+# --- TABELA DE PREÇOS ---
+PRECOS = {
+    'file duplo': {'ate_5kg': 4.90, 'acima_5kg': 5.80},
+    'alcatra': {'ate_5kg': 5.90, 'acima_5kg': 6.80},
+    'picanha': {'ate_5kg': 6.90, 'acima_5kg': 7.80}
+}
+LIMITE_KG = 5.0
+DESCONTO_CARTAO = 0.05 # 5%
+
+# --- 1. ENTRADA DE DADOS ---
+
+print("===================================================")
+print("      PROMOÇÃO DE CARNES HIPERMERCADO TABAJARA")
+print("===================================================")
+print("Tipos disponíveis: File Duplo | Alcatra | Picanha")
+
+# Solicita o tipo de carne e padroniza para minúsculo
+tipo_carne = input("Digite o tipo de carne: ").lower()
+
+# Verifica se o tipo de carne é válido
+if tipo_carne not in PRECOS:
+    print("\nERRO: Tipo de carne inválido. O programa será encerrado.")
+    exit()
+
+try:
+    quantidade_kg = float(input(f"Digite a quantidade de {tipo_carne.capitalize()} (em Kg): "))
+    
+    # Pergunta sobre o cartão Tabajara
+    usa_cartao = input("A compra será paga com o Cartão Tabajara? (S/N): ").strip().upper()
+    
+except ValueError:
+    print("\nERRO: Quantidade deve ser um número válido.")
+    exit()
+
+# --- 2. CÁLCULO DO PREÇO BRUTO ---
+
+preco_por_kg = 0.0
+
+# 2.1 Define o preço unitário baseado na quantidade
+if quantidade_kg <= LIMITE_KG:
+    preco_por_kg = PRECOS[tipo_carne]['ate_5kg']
+else:
+    preco_por_kg = PRECOS[tipo_carne]['acima_5kg']
+
+# 2.2 Calcula o valor bruto
+valor_bruto = quantidade_kg * preco_por_kg
+
+# --- 3. CÁLCULO DO DESCONTO E VALOR FINAL ---
+
+valor_desconto = 0.0
+valor_final = valor_bruto
+tipo_pagamento = "Dinheiro/Outros Cartões"
+
+if usa_cartao == 'S':
+    valor_desconto = valor_bruto * DESCONTO_CARTAO
+    valor_final = valor_bruto - valor_desconto
+    tipo_pagamento = "Cartão Tabajara (5% OFF)"
+
+# --- 4. GERAÇÃO DO CUPOM FISCAL ---
+
+print("\n\n===================================================")
+print("           CUPOM FISCAL TABAJARA")
+print("===================================================")
+
+# Informações da Compra
+print(f"Produto:           {tipo_carne.capitalize()}")
+print(f"Quantidade:        {quantidade_kg:.2f} Kg")
+print(f"Preço Unitário:    R$ {preco_por_kg:.2f} / Kg")
+print("---------------------------------------------------")
+
+# Valores e Pagamento
+print(f"Preço Total Bruto: R$ {valor_bruto:.2f}")
+print(f"Tipo de Pagamento: {tipo_pagamento}")
+print(f"Valor do Desconto: R$ {valor_desconto:.2f}")
+
+print("---------------------------------------------------")
+print(f"VALOR A PAGAR:     R$ {valor_final:.2f}")
+print("===================================================")
